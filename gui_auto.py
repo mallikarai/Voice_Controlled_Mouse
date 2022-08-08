@@ -1,10 +1,8 @@
 import pyautogui
+import os
 
-# Faster: Moves mouse pointer by 200 pixels
-# SLOWER: Moves mouse pointer by 20 pixels
-FASTER=200
-SLOWER=20
-
+FASTER=150
+SLOWER=18
 
 class gui_control:
     def __init__(self):
@@ -13,8 +11,7 @@ class gui_control:
         pyautogui.size()
 
     #------------------------------------------------------------------------------------
-    # Moves the Mouse pointer UPWARDS from it's current position, 
-    # until 'STOP' keyword is heard. 
+    # Moves the Mouse pointer UP from it's current position, until user says STOP.
     #------------------------------------------------------------------------------------
     def mouse_up(self,recognizer, src):
         while True:
@@ -34,8 +31,7 @@ class gui_control:
                 pyautogui.moveRel(0, -1*SLOWER, duration=0.25)
             
     #------------------------------------------------------------------------------------
-    # Moves the Mouse pointer DOWNWARDS from it's current position, 
-    # until 'STOP' keyword is heard. 
+    # Moves the Mouse pointer DOWN from it's current position, until user says STOP.
     #------------------------------------------------------------------------------------        
     def mouse_down(self,recognizer, src):
         while True:
@@ -80,7 +76,6 @@ class gui_control:
     # until 'STOP' keyword is heard. 
     #------------------------------------------------------------------------------------ 
     def mouse_right(self,recognizer, src):
-        #print("Move mouse right")
         pyautogui.moveRel(100, 0, duration=0.25)
         while True:
             speech_to_txt = ""
@@ -125,58 +120,28 @@ class gui_control:
     #------------------------------------------------------------------------------------       
     def open_chrome(self):
         print("Opening Chrome")
-        icon_location = pyautogui.locateOnScreen(r'screenshots\Chrome.PNG')
-        #print(type(icon_location))
-        if icon_location is not None:
-            if len(icon_location) == 4:
-                #Box(left=446, top=1023, width=74, height=52)
-                #Calculate point x,y position to click based on above location
-                #pyautogui.moveTo(icon_location.left, icon_location.top, duration=0.25)
-                pyautogui.click(x=icon_location.left, y=icon_location.top, duration=0.25)
-        else:
-            print("Could not locate Chrome Icon on screen")
+        try:
+            d = '/Applications'
+            apps = list(map(lambda x: x.split('.app')[0], os.listdir(d)))
+            app = 'Google Chrome'
+            os.system('open ' + d + '/%s.app' % app.replace(' ', '\ '))
+        except Exception as ex:
+            print("Exception occurred while opening chrome: "+ str(ex))
 
-    #------------------------------------------------------------------------------------
-    # CLICKS the NOTEPAD icon (if present in taskbar)
-    # A screenshot needs to be captured and stored in 'screenshots' folder, before the 
-    # program is run.
-    #------------------------------------------------------------------------------------           
-    def open_notepad(self):
-        print("Opening Notepad")
-        icon_location = pyautogui.locateOnScreen(r'screenshots\Notepad.PNG')
-        if icon_location is not None:
-            if len(icon_location) == 4:
-                #Box(left=446, top=1023, width=74, height=52)
-                #Calculate point x,y position to click based on above location
-                #pyautogui.moveTo(icon_location.left, icon_location.top, duration=0.25)
-                pyautogui.click(x=icon_location.left, y=icon_location.top, duration=0.25)
-        else:
-            print("Could not locate Notepad Icon on screen")
- 
+    def open_spotify(self):
+        print("Opening Spotify")
+        try:
+            d = '/Applications'
+            apps = list(map(lambda x: x.split('.app')[0], os.listdir(d)))
+            app = 'Spotify'
+            os.system('open ' + d + '/%s.app' % app.replace(' ', '\ '))
+        except Exception as ex:
+            print("Exception occurred while opening Spotify: "+ str(ex))
 
-    #------------------------------------------------------------------------------------
-    # Simulates the MUTE/UNMUTE key press
-    #------------------------------------------------------------------------------------ 
-    def mute_unmute(self):
-        print("Pressing Mute/Unmute Key")
-        pyautogui.typewrite(['volumemute'])
- 
     #------------------------------------------------------------------------------------
     # Simulates the SPACE key press
     #------------------------------------------------------------------------------------ 
     def play_pause(self):
         print("Pressing SPACE Key")
         pyautogui.typewrite(['space'])
-
-    #------------------------------------------------------------------------------------
-    # Simulates the VOLUME UP key press
-    #------------------------------------------------------------------------------------       
-    def volume_up(self):
-        pyautogui.typewrite(['volumeup'])
- 
-    #------------------------------------------------------------------------------------
-    # Simulates the VOLUME DOWN key press
-    #------------------------------------------------------------------------------------ 
-    def volume_down(self):
-        pyautogui.typewrite(['volumedown'])
 
